@@ -1,0 +1,18 @@
+version: "2"
+services:
+  public:
+    build: .
+    volumes:
+      - .:/www
+      - /www/node_modules
+    tty: true
+    ports:
+      - "8888:8888"
+    expose:
+      - "8888"
+    environment:
+      - REDIRECT_URI='http://localhost:8888/callback'
+      - CLIENT_SECRET=''
+      - CLIENT_ID=''
+      - SET_LIST_KEY=''
+      - PORT=8888

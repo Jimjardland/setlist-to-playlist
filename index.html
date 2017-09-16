@@ -10,7 +10,7 @@
         <div class="content">
             <input type="text" class="input-playlist" id="artist" /><button id="create-playlist" class="btn-playlist">Create playlist</button>
             <br />
-            <span id="message" class="message">tja fan hur är fan lilla läget då</span>
+            <span id="message" class="message"></span>
         </div>
     </div>
 </body>
@@ -27,7 +27,9 @@ function getParameterByName(name) {
 }
 
 function createPlaylist () {
+  message('Creating playlist', 'blue')
   var artist = document.getElementById('artist').value
+  document.getElementById('artist').value = ''
   var token = getParameterByName('code')
   var myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
@@ -38,9 +40,15 @@ function createPlaylist () {
       body: JSON.stringify({ artist: artist, token: token }),
       headers: myHeaders
   })
-  .then(response => response.json())
+  .then(response => {
+      var json = response.json()
+      if(!response.ok) return json.then(err => {throw err;});
+      return json
+   })
   .then(json => message(json.message, 'green'))
-  .catch(error => message(error, 'red'))
+  .catch(error => {
+      message(error.message, 'red')
+   })
 }
 
 function message (text, color) {
@@ -50,5 +58,11 @@ function message (text, color) {
 }
 
 document.getElementById('create-playlist').addEventListener('click', createPlaylist)
+document.getElementById('artist').addEventListener('keypress', function (e) {
+    var key = e.which || e.keyCode;
+    if (key === 13) {
+      createPlaylist()
+    }
+})
 </script>
 </html>
