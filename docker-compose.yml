@@ -11,7 +11,7 @@ services:
     expose:
       - "8888"
     environment:
-      - REDIRECT_URI='http://localhost:8888/callback'
+      - REDIRECT_URI='http://localhost:8888/create'
       - CLIENT_SECRET=''
       - CLIENT_ID=''
       - SET_LIST_KEY=''

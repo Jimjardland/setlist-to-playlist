@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api', router)
 app.use('/', express.static('client'))
 app.get('/', async (req, res) => res.redirect(await auth.getLoginUrl()))
-app.get('/callback', (req, res) => res.sendFile(path.resolve('index.html')))
+app.get('/create', (req, res) => res.sendFile(path.resolve('index.html')))
 
 router.post('/create-playlist', async (req, res, next) => {
   createPlaylist(req.body.artist, req.body.token)
