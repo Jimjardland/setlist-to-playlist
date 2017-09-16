@@ -1,0 +1,20 @@
+{
+  "name": "playlist-to-setlist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "node-fetch": "^1.7.3",
+    "p-map": "^1.2.0",
+    "request": "^2.81.0",
+    "spotify-web-api-node": "^2.5.0"
+  }
+}

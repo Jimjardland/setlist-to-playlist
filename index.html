@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <input type="text" class="input-playlist" id="artist" /><button id="create-playlist" class="btn-playlist">Create playlist</button>
+            <br />
+            <span id="message" class="message">tja fan hur är fan lilla läget då</span>
+        </div>
+    </div>
+</body>
+
+<script>
+function getParameterByName(name) {
+  var url = window.location.href;
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
+  var results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function createPlaylist () {
+  var artist = document.getElementById('artist').value
+  var token = getParameterByName('code')
+  var myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+
+  var url = '/api/create-playlist'
+  fetch(url, {
+      method : 'POST',
+      body: JSON.stringify({ artist: artist, token: token }),
+      headers: myHeaders
+  })
+  .then(response => response.json())
+  .then(json => message(json.message, 'green'))
+  .catch(error => message(error, 'red'))
+}
+
+function message (text, color) {
+    var message = document.getElementById('message')
+    message.style.color = color || 'red'
+    message.textContent = text || 'Something went wrong!'
+}
+
+document.getElementById('create-playlist').addEventListener('click', createPlaylist)
+</script>
+</html>
