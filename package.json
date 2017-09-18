@@ -16,6 +16,7 @@
     "node-fetch": "^1.7.3",
     "p-map": "^1.2.0",
     "request": "^2.81.0",
-    "spotify-web-api-node": "^2.5.0"
+    "spotify-web-api-node": "^2.5.0",
+    "to-title-case": "^1.0.0"
   }
 }

@@ -15,7 +15,7 @@ app.get('/', async (req, res) => res.redirect(await auth.getLoginUrl()))
 app.get('/create', (req, res) => res.sendFile(path.resolve('index.html')))
 
 router.post('/create-playlist', async (req, res, next) => {
-  createPlaylist(req.body.artist, req.body.token)
+  createPlaylist(req.body.artist.toLowerCase(), req.body.token)
     .then(message => res.send({ message }))
     .catch(error => res.status(400).send({ message: error.message }))
 })
