@@ -17,7 +17,7 @@
 
 <script>
 var code = getParameterByName('code')
-var token = JSON.parse(localStorage.getItem(code)).accessToken
+var token = JSON.parse(localStorage.getItem(code))
 function getParameterByName(name) {
   var url = window.location.href;
   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
@@ -50,7 +50,7 @@ function createPlaylist () {
   document.getElementById('artist').value = ''
 
 
-  ajaxPost('/api/create-playlist', { artist: artist, token: token })
+  ajaxPost('/api/create-playlist', { artist: artist, token: token.accessToken })
     .then(json => message(json.message, 'green'))
     .catch(error => {
       message(error.message, 'red')
