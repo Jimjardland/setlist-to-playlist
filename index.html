@@ -16,6 +16,8 @@
 </body>
 
 <script>
+var code = getParameterByName('code')
+var token = JSON.parse(localStorage.getItem(code)).accessToken
 function getParameterByName(name) {
   var url = window.location.href;
   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
@@ -26,18 +28,13 @@ function getParameterByName(name) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function createPlaylist () {
-  message('Creating playlist', 'blue')
-  var artist = document.getElementById('artist').value
-  document.getElementById('artist').value = ''
-  var token = getParameterByName('code')
+function ajaxPost (url, body) {
   var myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
 
-  var url = '/api/create-playlist'
-  fetch(url, {
+  return fetch(url, {
       method : 'POST',
-      body: JSON.stringify({ artist: artist, token: token }),
+      body: JSON.stringify(body),
       headers: myHeaders
   })
   .then(response => {
@@ -45,16 +42,32 @@ function createPlaylist () {
       if(!response.ok) return json.then(err => {throw err;});
       return json
    })
-  .then(json => message(json.message, 'green'))
-  .catch(error => {
+}
+
+function createPlaylist () {
+  message('Creating playlist', 'blue')
+  var artist = document.getElementById('artist').value
+  document.getElementById('artist').value = ''
+
+
+  ajaxPost('/api/create-playlist', { artist: artist, token: token })
+    .then(json => message(json.message, 'green'))
+    .catch(error => {
       message(error.message, 'red')
    })
 }
 
 function message (text, color) {
-    var message = document.getElementById('message')
-    message.style.color = color || 'red'
-    message.textContent = text || 'Something went wrong!'
+  var message = document.getElementById('message')
+  message.style.color = color || 'red'
+  message.textContent = text || 'Something went wrong!'
+}
+
+function getToken () {
+  if(!token) {
+    ajaxPost('/api/auth', { code: code })
+        .then(json => localStorage.setItem(code, JSON.stringify(json)))
+  }
 }
 
 document.getElementById('create-playlist').addEventListener('click', createPlaylist)
@@ -64,5 +77,6 @@ document.getElementById('artist').addEventListener('keypress', function (e) {
       createPlaylist()
     }
 })
+getToken()
 </script>
 </html>
