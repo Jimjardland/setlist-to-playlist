@@ -8,16 +8,23 @@
 <body>
     <div class="container">
         <div class="content">
-            <input type="text" class="input-playlist" id="artist" /><button id="create-playlist" class="btn-playlist">Create playlist</button>
+            <input type="text" class="input-playlist" id="artist" placeholder="Write an artist/band..." /><button id="create-playlist" class="btn-playlist">Create playlist</button>
             <br />
             <span id="message" class="message"></span>
         </div>
     </div>
-</body>
 
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106614001-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-106614001-1');
+</script>
 <script>
 var code = getParameterByName('code')
-var token = JSON.parse(localStorage.getItem(code))
 function getParameterByName(name) {
   var url = window.location.href;
   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
@@ -26,6 +33,10 @@ function getParameterByName(name) {
   if (!results[2]) return '';
 
   return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function getAccessToken (code) {
+  return JSON.parse(localStorage.getItem(code))
 }
 
 function ajaxPost (url, body) {
@@ -50,7 +61,7 @@ function createPlaylist () {
   document.getElementById('artist').value = ''
 
 
-  ajaxPost('/api/create-playlist', { artist: artist, token: token.accessToken })
+  ajaxPost('/api/create-playlist', { artist: artist, token: getAccessToken(code).accessToken })
     .then(json => message(json.message, 'green'))
     .catch(error => {
       message(error.message, 'red')
@@ -64,7 +75,7 @@ function message (text, color) {
 }
 
 function getToken () {
-  if(!token) {
+  if(!getAccessToken(code)) {
     ajaxPost('/api/auth', { code: code })
         .then(json => localStorage.setItem(code, JSON.stringify(json)))
   }
@@ -79,4 +90,5 @@ document.getElementById('artist').addEventListener('keypress', function (e) {
 })
 getToken()
 </script>
+</body>
 </html>
