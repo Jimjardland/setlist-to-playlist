@@ -20,6 +20,10 @@ router.post('/create-playlist', async (req, res, next) => {
     .catch(error => res.status(400).send({ message: error.message }))
 })
 
+router.post('/auth', async (req, res, next) => {
+  const tokens = await auth.getTokens(req.body.code)
+  res.send(tokens)
+})
 
 const server = http.createServer(app)
 const PORT = process.env.PORT || 8888
